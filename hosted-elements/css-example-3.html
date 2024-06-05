@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<style>
+    /* General container styles */
+    #gc_pay_list_container {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 10px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        max-width: 400px;
+        overflow-x: scroll;
+        position: relative;
+        scrollbar-width: none; /* For Firefox */
+    }
+
+    #gc_pay_list_container::-webkit-scrollbar {
+        display: none; /* For Chrome, Safari, and Opera */
+    }
+
+    #gc_pay_list_container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 40px; /* Adjust width as needed */
+        height: 100%;
+        background: linear-gradient(to left, #f9f9f9, transparent);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    #gc_pay_list_container.show-more {
+        max-height: 200px;
+        overflow-y: hidden;
+    }
+
+    #gc_pay_list_container.show-more::after {
+        content: 'Show More';
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 40px;
+        background: linear-gradient(to top, #f9f9f9, transparent);
+        color: #1976D2;
+        cursor: pointer;
+    }
+
+    #gc_pay_list_container.show-more:hover::after {
+        text-decoration: underline;
+    }
+
+    /* Payment method styles */
+    .pay_method {
+        flex: 1 1 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #ffffff;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        text-align: center;
+    }
+
+    .pay_method:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Heading style */
+    h1 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .p_line {
+        text-align: center;
+        font-size: 16px;
+        color: #555;
+    }
+
+    /* Form style */
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Label style */
+    label {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    /* Input field style */
+    input[type="text"] {
+        width: 88%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    /* Button style */
+    button#generate_pay_list {
+        width: 90%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button#generate_pay_list:hover {
+        background-color: #45a049;
+    }
+
+    /* Loader style */
+    #gc-cashier-loading {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .gc-cashier-loader {
+        top: 50%;
+        left: 50%;
+        border: 6px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 6px solid #3498db;
+        width: 20px;
+        height: 20px;
+        animation: spin 2s linear infinite;
+        position: fixed;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Pay now button style */
+    #pay_now_button_container button {
+        background-color: #4CAF50; /* Green background */
+        border: none; /* Remove borders */
+        color: white; /* White text */
+        padding: 15px 20px; /* Some padding */
+        text-align: center; /* Centered text */
+        text-decoration: none; /* Remove underline */
+        display: inline-block; /* Get elements to line up nicely */
+        font-size: 16px; /* Increase font size */
+        margin: 4px 2px; /* Some margin */
+        cursor: pointer; /* Pointer/hand icon */
+        border-radius: 8px; /* Rounded corners */
+        transition-duration: 0.4s; /* Smooth transition */
+    }
+
+    #pay_now_button_container button:hover {
+        background-color: white; /* White background */
+        color: black; /* Black text */
+        border: 2px solid #4CAF50; /* Green border */
+    }
+
+    #pay_qrcode_container {
+        text-align: center;
+    }
+
+</style>
+</head>
+<body>
+<!--simulate your purchase process, it depends on your business-->
+<div>
+    <h1>Assuming that your Pre-pay order id is here.</h1>
+    <p class="p_line">This page is stimulate your purchase processing, you can customise elements style to compatible with your shop/website.</p>
+    <form>
+        <label for="tradeId"></label><input placeholder="paste your trade id here" id="tradeId" name="tradeId" value="" type="text">
+        <button id="generate_pay_list" type="button">Choose the pay method you prefer</button>
+    </form>
+</div>
+<br>
+
+
+<template id="payment-method-template">
+    <div class="pay_method"  >
+        <!--if you prefer button use pay_method_button-->
+        <!--        <button id="pay_method_button" class="pay_method_button">Checkout</button>-->
+        <!--        <span id="pay_method_name" class="pay_method_name"></span>-->
+        <!-- recommend show the logo to your customer,it's clickable.        -->
+        <img src="" alt="" class="pay_method_logo" id="pay_method_logo">
+    </div>
+</template>
+<!--containers begin-->
+<div id="gc-cashier-loading" class="gc-cashier-loading">
+    <div class="gc-cashier-loader" id="gc-cashier-loader"></div>
+</div>
+<div id="gc_pay_list_container" class="gc_pay_list_container"></div>
+<div id="pay_qrcode_container" class="pay_qrcode_container"></div>
+<div id="gc_pay_mandatory_field_container" class="gc_pay_mandatory_field_container"></div>
+<div id="pay_now_button_container" class="pay_now_button_container"></div>
+<div id="gc_pay_notice_container" class="gc_pay_notice_container"></div>
+<div id="gc_pay_countdown_container" class="gc_pay_countdown_container"></div>
+<!--containers end-->
+
+<!--import the client js in your page-->
+<script src="https://test-payment.gloprocessor.com/payment/static/js/payment-client-1.0.1.min.js"></script>
+
+
+<script>
+    // simulate purchase, your logic maybe different here. it depends on your business
+    const generateButton = document.getElementById("generate_pay_list");
+    generateButton.addEventListener("click", async () => {
+        generateButton.textContent = "Loading...";
+        const youTradeId =  document.getElementById("tradeId").value
+        console.log("tradeId", youTradeId)
+        await GcPayClient.GlobalPaySDK.createPayMethod(youTradeId);
+        generateButton.textContent = "Choose one please";
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const payListContainer = document.getElementById('gc_pay_list_container');
+        const payMethods = payListContainer.querySelectorAll('.pay_method');
+
+        if (payMethods.length > 4) {
+            payListContainer.classList.add('show-more');
+            payListContainer.addEventListener('click', function() {
+                payListContainer.classList.remove('show-more');
+            });
+        }
+    });
+
+
+</script>
+</body>
+</html>

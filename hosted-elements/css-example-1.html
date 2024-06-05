@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        /* General container styles */
+        #gc_pay_list_container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 20px;
+            background-color: #e8f0fe;
+            border-radius: 15px;
+            border: 1px solid #ccc;
+        }
+
+        /* Payment method styles */
+        .pay_method {
+            flex: 1 1 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .pay_method:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Heading style */
+        h1 {
+            font-size: 28px;
+            color: #444;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .p_line {
+            text-align: center;
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* Form style */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Label style */
+        label {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 12px;
+        }
+
+        /* Input field style */
+        input[type="text"] {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        /* Button style */
+        button#generate_pay_list {
+            width: 92%;
+            padding: 12px;
+            background-color: #1976D2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button#generate_pay_list:hover {
+            background-color: #1565C0;
+        }
+
+        /* Loader style */
+        #gc-cashier-loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .gc-cashier-loader {
+            top: 50%;
+            left: 50%;
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #3498db;
+            width: 30px;
+            height: 30px;
+            animation: spin 2s linear infinite;
+            position: fixed;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Pay now button style */
+        #pay_now_button_container button {
+            background-color: #1976D2;
+            border: none;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition-duration: 0.4s;
+        }
+
+        #pay_now_button_container button:hover {
+            background-color: white;
+            color: #1976D2;
+            border: 2px solid #1976D2;
+        }
+
+        #pay_qrcode_container {
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+<!--simulate your purchase process, it depends on your business-->
+<div>
+    <h1>Assuming that your Pre-pay order id is here.</h1>
+    <p class="p_line">This page is stimulate your purchase processing, you can customise elements style to compatible with your shop/website.</p>
+    <form>
+        <label for="tradeId"></label><input placeholder="paste your trade id here" id="tradeId" name="tradeId" value="" type="text">
+        <button id="generate_pay_list" type="button">Choose the pay method you prefer</button>
+    </form>
+</div>
+<br>
+
+
+<template id="payment-method-template">
+    <div class="pay_method"  >
+        <!--if you prefer button use pay_method_button-->
+        <!--        <button id="pay_method_button" class="pay_method_button">Checkout</button>-->
+        <!--        <span id="pay_method_name" class="pay_method_name"></span>-->
+        <!-- recommend show the logo to your customer,it's clickable.        -->
+        <img src="" alt="" class="pay_method_logo" id="pay_method_logo">
+    </div>
+</template>
+<!--containers begin-->
+<div id="gc-cashier-loading" class="gc-cashier-loading">
+    <div class="gc-cashier-loader" id="gc-cashier-loader"></div>
+</div>
+<div id="gc_pay_list_container" class="gc_pay_list_container"></div>
+<div id="pay_qrcode_container" class="pay_qrcode_container"></div>
+<div id="gc_pay_mandatory_field_container" class="gc_pay_mandatory_field_container"></div>
+<div id="pay_now_button_container" class="pay_now_button_container"></div>
+<div id="gc_pay_notice_container" class="gc_pay_notice_container"></div>
+<div id="gc_pay_countdown_container" class="gc_pay_countdown_container"></div>
+<!--containers end-->
+
+<!--import the client js in your page-->
+<script src="https://test-payment.gloprocessor.com/payment/static/js/payment-client-1.0.1.min.js"></script>
+
+
+<script>
+    // simulate purchase, your logic maybe different here. it depends on your business
+    const generateButton = document.getElementById("generate_pay_list");
+    generateButton.addEventListener("click", async () => {
+        generateButton.textContent = "Loading...";
+        const youTradeId =  document.getElementById("tradeId").value
+        console.log("tradeId", youTradeId)
+        await GcPayClient.GlobalPaySDK.createPayMethod(youTradeId);
+        generateButton.textContent = "Choose one please";
+    });
+</script>
+</body>
+</html>
