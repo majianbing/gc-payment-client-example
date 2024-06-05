@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--simulate your purchase process, it depends on your business-->
+<div>
+    <h1>Assuming that your Pre-pay order id is here.</h1>
+    <p class="p_line">This page is stimulate your purchase processing, you can customise elements style to compatible with your shop/website.</p>
+    <form>
+        <label for="tradeId"></label><input placeholder="paste your trade id here" id="tradeId" name="tradeId" value="" type="text">
+        <button id="generate_pay_list" type="button">Choose the pay method you prefer</button>
+    </form>
+</div>
+<br>
+
+
+<template id="payment-method-template">
+    <div class="pay_method"  >
+        <!--if you prefer button use pay_method_button-->
+<!--        <button id="pay_method_button" class="pay_method_button">Checkout</button>-->
+        <!--        <span id="pay_method_name" class="pay_method_name"></span>-->
+        <!-- recommend show the logo to your customer,it's clickable.        -->
+        <img src="" alt="" class="pay_method_logo" id="pay_method_logo">
+    </div>
+</template>
+<!--containers begin-->
+<div id="gc-cashier-loading" class="gc-cashier-loading">
+    <div class="gc-cashier-loader" id="gc-cashier-loader"></div>
+</div>
+<div id="gc_pay_list_container" class="gc_pay_list_container"></div>
+<div id="pay_qrcode_container" class="pay_qrcode_container"></div>
+<div id="gc_pay_mandatory_field_container" class="gc_pay_mandatory_field_container"></div>
+<div id="pay_now_button_container" class="pay_now_button_container"></div>
+<div id="gc_pay_notice_container" class="gc_pay_notice_container"></div>
+<div id="gc_pay_countdown_container" class="gc_pay_countdown_container"></div>
+<!--containers end-->
+
+<!--import the client js in your page-->
+<script src="https://test-payment.gloprocessor.com/payment/static/js/payment-client-1.0.1.min.js"></script>
+
+
+<script>
+    // simulate purchase, your logic maybe different here. it depends on your business
+    const generateButton = document.getElementById("generate_pay_list");
+    generateButton.addEventListener("click", async () => {
+        generateButton.textContent = "Loading...";
+        const youTradeId =  document.getElementById("tradeId").value
+        console.log("tradeId", youTradeId)
+        await GcPayClient.GlobalPaySDK.createPayMethod(youTradeId);
+        generateButton.textContent = "Choose one please";
+    });
+</script>
+</body>
+</html>
