@@ -20,6 +20,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: space-around;
             background-color: #ffffff;
             padding: 5px;
             border: 1px solid #ddd;
@@ -145,6 +146,34 @@
         #pay_qrcode_container {
             text-align: center;
         }
+        #gc_card_pay_container_card {
+            display: inline-block;
+            position: relative;
+            width: 320px;
+            height: 40px;
+        }
+
+        #gc_card_pay_container_date {
+            display: inline-block;
+            position: relative;
+            width: 320px;
+            height: 40px;
+        }
+        #gc_card_pay_container_cvv2 {
+            display: inline-block;
+            position: relative;
+            width: 320px;
+            height: 40px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            max-height: 80px;
+            border: none;
+            overflow: hidden;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -163,8 +192,8 @@
 <template id="payment-method-template">
     <div class="pay_method"  >
         <!--if you prefer button use pay_method_button-->
-<!--        <button id="pay_method_button" class="pay_method_button">Checkout</button>-->
-        <!--        <span id="pay_method_name" class="pay_method_name"></span>-->
+        <!--<button id="pay_method_button" class="pay_method_button">Checkout</button>-->
+        <!--<span id="pay_method_name" class="pay_method_name"></span>-->
         <!-- recommend show the logo to your customer,it's clickable.        -->
         <img src="" alt="" class="pay_method_logo" id="pay_method_logo">
     </div>
@@ -175,14 +204,22 @@
 </div>
 <div id="gc_pay_list_container" class="gc_pay_list_container"></div>
 <div id="pay_qrcode_container" class="pay_qrcode_container"></div>
+
+<!--card begin-->
+<div id="gc_card_pay_container_card" class="gc_card_pay_container_card" ></div>
+<div id="gc_card_pay_container_date" class="gc_card_pay_container_date" ></div>
+<div id="gc_card_pay_container_cvv2" class="gc_card_pay_container_cvv2" ></div>
+<!--card end-->
+
 <div id="gc_pay_mandatory_field_container" class="gc_pay_mandatory_field_container"></div>
 <div id="pay_now_button_container" class="pay_now_button_container"></div>
 <div id="gc_pay_notice_container" class="gc_pay_notice_container"></div>
 <div id="gc_pay_countdown_container" class="gc_pay_countdown_container"></div>
 <!--containers end-->
 
+
 <!--import the client js in your page-->
-<script src="https://test-payment.gloprocessor.com/payment/static/js/payment-client-1.0.1.min.js"></script>
+<script src="https://test-payment.gloprocessor.com/payment/static/js/hostedElement/payment-client-1.0.2.min.js"></script>
 
 
 <script>

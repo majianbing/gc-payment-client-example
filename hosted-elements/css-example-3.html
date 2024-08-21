@@ -64,6 +64,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: space-around;
         background-color: #ffffff;
         padding: 10px;
         border: 1px solid #ddd;
@@ -220,13 +221,18 @@
 <div id="gc_pay_list_container" class="gc_pay_list_container"></div>
 <div id="pay_qrcode_container" class="pay_qrcode_container"></div>
 <div id="gc_pay_mandatory_field_container" class="gc_pay_mandatory_field_container"></div>
+<!--card begin-->
+<div id="gc_card_pay_container_card" class="gc_card_pay_container_card" style="width: 200px; height: 30px;"></div>
+<div id="gc_card_pay_container_date" class="gc_card_pay_container_date" style="width: 200px; height: 30px;"></div>
+<div id="gc_card_pay_container_cvv2" class="gc_card_pay_container_cvv2" style="width: 200px; height: 30px;"></div>
+<!--card end-->
 <div id="pay_now_button_container" class="pay_now_button_container"></div>
 <div id="gc_pay_notice_container" class="gc_pay_notice_container"></div>
 <div id="gc_pay_countdown_container" class="gc_pay_countdown_container"></div>
 <!--containers end-->
 
 <!--import the client js in your page-->
-<script src="https://test-payment.gloprocessor.com/payment/static/js/payment-client-1.0.1.min.js"></script>
+<script src="https://test-payment.gloprocessor.com/payment/static/js/hostedElement/payment-client-1.0.2.min.js"></script>
 
 
 <script>
