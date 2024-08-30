@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Apple Pay</title>
+</head>
+<style>
+    #open-popup-btn {
+        background-image: url("https://payment.gloprocessor.com/payment/img/ApplePay.svg");
+        display: flex;
+        border: 1px solid black;
+        border-radius: 4px;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 50px;
+        max-height: 50px;
+        margin-top: 15px;
+        cursor: pointer;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    #gc_pay_apple{
+        display: none;
+    }
+</style>
+<body>
+<div id="gc_pay_apple">
+    <h1>You can put this in anywhere as your wish.</h1>
+    <div id="open-popup-btn" onclick="callGCApplePay()"></div>
+</div>
+<script async src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js?id=LdkwiahL-Apple"></script>
+<script src="https://test-payment.gloprocessor.com/payment/static/js/hosted-element/payment-client-1.0.2.min.js"></script>
+<script>
+    if (window.ApplePaySession) {
+        // show the payment method.
+        document.getElementById("gc_pay_apple").style.display = "block";
+    } else {
+        console.log("Apple Pay is not available on this device.")
+    }
+    function callGCApplePay(){
+        console.log("call your own server to get tradeId")
+        console.log("NEVER call prepay API from frontend, in order to protect your secret key.")
+        const tradeId = "9c01c66290b0b68c447bc1dea5ded3e5";
+        GcPayClient.GlobalPaySDK.callApplePay(tradeId);
+    }
+    window.addEventListener("message", function (event) {
+        if (event.data === "started") {
+            console.log("user click apple pay and started payment process on apple device");
+        } else if (event.data.action === "cancel") {
+            console.log("user canceled");
+        } else if (event.data.action === "success") {
+            console.log("payment success", event.data.resData);
+        } else if (event.data.action === "failed") {
+            console.log("payment failed", event.data.resData);
+        }
+    });
+</script>
+</body>
+</html>
